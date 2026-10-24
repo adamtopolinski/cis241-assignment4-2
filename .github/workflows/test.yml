@@ -1,0 +1,25 @@
+name: Test Bash dice roller
+
+on:
+  push:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - name: Check Bash syntax and executable permission
+        run: |
+          bash -n dice.sh
+          test -x dice.sh
+      - name: Run behavior tests
+        run: python3 tests/test_dice.py
+      - name: Demonstrate the example
+        run: ./dice.sh 4 6
